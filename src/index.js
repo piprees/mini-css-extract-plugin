@@ -397,12 +397,13 @@ class MiniCssExtractPlugin {
                   'var linkTag = document.createElement("link");',
                   'linkTag.rel = "stylesheet";',
                   'linkTag.type = "text/css";',
+                  'linkTag.onload = resolve;',
                   ...Object.keys(attrs).map((k) => {
                     const key = JSON.stringify(k);
                     const value = JSON.stringify(attrs[k] || '');
+                    if (k === 'onload') value = value + ';resolve();'
                     return `linkTag.setAttribute(${key}, ${value});`;
                   }),
-                  'linkTag.onload = resolve;',
                   'linkTag.onerror = function(event) {',
                   Template.indent([
                     'var request = event && event.target && event.target.src || fullhref;',
